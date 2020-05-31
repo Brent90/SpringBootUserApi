@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -99,5 +100,17 @@ class UserServiceImplTest {
         assertEquals(EMAIL, savedDTO.getEmail());
         verify(userRepository, times(1)).save(any(User.class));
 
+    }
+
+    @Test
+    void deleteUserById() {
+        User user = new User();
+        user.setId(ID);
+
+        userRepository.deleteById(ID);
+        Optional<User> optionalUser = userRepository.findById(ID);
+
+        assertThrows(NoSuchElementException.class, () -> optionalUser.get());
+        verify(userRepository, times(1)).deleteById(anyLong());
     }
 }
