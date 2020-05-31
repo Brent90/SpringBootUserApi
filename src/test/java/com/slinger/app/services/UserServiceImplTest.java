@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,31 @@ class UserServiceImplTest {
         assertEquals(EMAIL, userDTO.getEmail());
         assertEquals("/api/v1/users/" + ID, userDTO.getUserUrl()); //todo make this a constant
         verify(userRepository, times(1)).findById(anyLong());
+
+    }
+
+    @Test
+    void createNewUser() {
+        //given
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(NAME);
+        userDTO.setUsername(USERNAME);
+        userDTO.setEmail(EMAIL);
+
+        User savedUser = UserMapper.USER_MAPPER.userDTOToUser(userDTO);
+        savedUser.setId(ID);
+
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+
+        //when
+        UserDTO savedDTO = userService.createNewUser(userDTO);
+
+        //then
+        assertNotNull(savedDTO);
+        assertEquals(NAME, savedDTO.getName());
+        assertEquals(USERNAME, savedDTO.getUsername());
+        assertEquals(EMAIL, savedDTO.getEmail());
+        verify(userRepository, times(1)).save(any(User.class));
 
     }
 }

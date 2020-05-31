@@ -10,4 +10,6 @@ public interface UserService {
 
     UserDTO findUserById(Long id);
 
+    UserDTO createNewUser(UserDTO userDTO);
+
 }

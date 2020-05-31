@@ -2,6 +2,7 @@ package com.slinger.app.services;
 
 import com.slinger.app.api.v1.mapper.UserMapper;
 import com.slinger.app.api.v1.model.UserDTO;
+import com.slinger.app.domian.User;
 import com.slinger.app.repositories.UserRepository;
 
 import java.util.List;
@@ -39,5 +40,16 @@ public class UserServiceImpl implements UserService {
                     return userDTO;
                 })
                 .orElseThrow(() ->new RuntimeException("User not found with id " + id)); //todo add better exception handling
+    }
+
+    @Override
+    public UserDTO createNewUser(UserDTO userDTO) {
+        User user = UserMapper.USER_MAPPER.userDTOToUser(userDTO);
+        User savedUser = userRepository.save(user);
+
+        UserDTO returnDTO = userMapper.userToUserDTO(savedUser);
+        returnDTO.setUserUrl("/api/v1/users/" + savedUser.getId());  //todo make this a constant
+
+        return returnDTO;
     }
 }
