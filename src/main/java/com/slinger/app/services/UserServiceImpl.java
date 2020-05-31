@@ -28,4 +28,16 @@ public class UserServiceImpl implements UserService {
                     return userDTO;
                 }).collect(Collectors.toList());
     }
+
+    @Override
+    public UserDTO findUserById(Long id) {
+        return userRepository
+                .findById(id)
+                .map(user -> {
+                    UserDTO userDTO = userMapper.userToUserDTO(user);
+                    userDTO.setUserUrl("/api/v1/users/" + user.getId()); //todo make this a constant
+                    return userDTO;
+                })
+                .orElseThrow(() ->new RuntimeException("User not found with id " + id)); //todo add better exception handling
+    }
 }

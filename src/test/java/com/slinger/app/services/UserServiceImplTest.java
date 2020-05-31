@@ -2,6 +2,7 @@ package com.slinger.app.services;
 
 import com.slinger.app.api.v1.mapper.UserMapper;
 import com.slinger.app.api.v1.model.UserDTO;
+import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
 import com.slinger.app.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,12 +12,17 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
 
+    public static final long ID = 1L;
+    public static final String NAME = "User Name";
+    public static final String USERNAME = "username343";
+    public static final String EMAIL = "email@gmail.com";
     @Mock
     UserRepository userRepository;
 
@@ -42,6 +48,30 @@ class UserServiceImplTest {
         assertNotNull(userDTOS);
         assertEquals(3, userDTOS.size());
         verify(userRepository, times(1)).findAll();
+
+    }
+
+    @Test
+    void findUserById() {
+        //given
+        User user = new User();
+        user.setId(ID);
+        user.setName(NAME);
+        user.setUsername(USERNAME);
+        user.setEmail(EMAIL);
+
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        //when
+        UserDTO userDTO = userService.findUserById(anyLong());
+
+        //then
+        assertNotNull(userDTO);
+        assertEquals(NAME, userDTO.getName());
+        assertEquals(USERNAME, userDTO.getUsername());
+        assertEquals(EMAIL, userDTO.getEmail());
+        assertEquals("/api/v1/users/" + ID, userDTO.getUserUrl()); //todo make this a constant
+        verify(userRepository, times(1)).findById(anyLong());
 
     }
 }
