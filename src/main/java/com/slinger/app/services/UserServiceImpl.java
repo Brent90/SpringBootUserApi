@@ -45,11 +45,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO createNewUser(UserDTO userDTO) {
         User user = UserMapper.USER_MAPPER.userDTOToUser(userDTO);
+        return saveAndReturn(user);
+    }
+
+    @Override
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        User user = UserMapper.USER_MAPPER.userDTOToUser(userDTO);
+        user.setId(id);
+        return saveAndReturn(user);
+    }
+
+    //helper method for saving and updating user
+    private UserDTO saveAndReturn(User user) {
         User savedUser = userRepository.save(user);
-
         UserDTO returnDTO = userMapper.userToUserDTO(savedUser);
-        returnDTO.setUserUrl("/api/v1/users/" + savedUser.getId());  //todo make this a constant
-
+        returnDTO.setUserUrl("/api/v1/users/" + savedUser.getId()); //todo make this a constant
         return returnDTO;
     }
 }
