@@ -18,6 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,29 +80,57 @@ class UserControllerTest {
         verify(userService, times(1)).findUserById(anyLong());
     }
 
-    @Test //todo fix this testing
+    @Test
     void createUser() throws Exception {
-//        UserDTO userDTO = new UserDTO();
-//        userDTO.setName(NAME);
-//        userDTO.setUsername(USERNAME);
-//        userDTO.setEmail(EMAIL);
-//
-//        UserDTO returnDTO = new UserDTO();
-//        returnDTO.setName(userDTO.getName());
-//        returnDTO.setUsername(userDTO.getUsername());
-//        returnDTO.setEmail(userDTO.getEmail());
-//        returnDTO.setUserUrl(USER_URL + "/1");
-//
-//        when(userService.createNewUser(userDTO)).thenReturn(returnDTO);
-//
-//        mockMvc.perform(post(USER_URL)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .contentType(new ObjectMapper().writeValueAsString(userDTO)))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.name", equalTo(NAME)));
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(NAME);
+        userDTO.setUsername(USERNAME);
+        userDTO.setEmail(EMAIL);
+
+        UserDTO returnDTO = new UserDTO();
+        returnDTO.setName(userDTO.getName());
+        returnDTO.setUsername(userDTO.getUsername());
+        returnDTO.setEmail(userDTO.getEmail());
+        returnDTO.setUserUrl(USER_URL + "/1");
+
+        when(userService.createNewUser(userDTO)).thenReturn(returnDTO);
+
+        mockMvc.perform(post(USER_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(userDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.name", equalTo(NAME)))
+                .andExpect(jsonPath("$.username", equalTo(USERNAME)))
+                .andExpect(jsonPath("$.user_url", equalTo(USER_URL +"/1")));
+
+        verify(userService, times(1)).createNewUser(any(UserDTO.class));
     }
 
 
+    @Test
+    void updateUser() throws Exception{
+        UserDTO user = new UserDTO();
+        user.setName(NAME);
+        user.setEmail(EMAIL);
+        user.setUsername(USERNAME);
+
+        UserDTO returnDTO = new UserDTO();
+        returnDTO.setName(user.getName());
+        returnDTO.setEmail(user.getEmail());
+        returnDTO.setUsername(USERNAME);
+        returnDTO.setUserUrl(USER_URL + "/1");
+
+        when(userService.updateUser(anyLong(), any(UserDTO.class))).thenReturn(returnDTO);
+
+        mockMvc.perform(put(USER_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user_url", equalTo(USER_URL + "/1")));
+
+        verify(userService, times(1)).updateUser(anyLong(), any(UserDTO.class));
+
+    }
 }
 
 

@@ -13,6 +13,7 @@ public class UserDTO {
     private String name;
     private String username;
     private String email;
+    @JsonProperty("user_url")
     private String userUrl;
 
 }

@@ -46,7 +46,5 @@ public class Bootstrap implements CommandLineRunner {
         userRepository.save(user9);
         userRepository.save(user10);
 
-
-
     }
 }
