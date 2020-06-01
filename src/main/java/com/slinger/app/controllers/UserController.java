@@ -1,12 +1,10 @@
 package com.slinger.app.controllers;
 
+import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.api.v1.model.UserDTOList;
 import com.slinger.app.services.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -23,5 +21,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserDTOList listAllUsers() {
         return new UserDTOList(userService.listAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getUserById(@PathVariable String id) {
+        return userService.findUserById(Long.valueOf(id));
     }
 }

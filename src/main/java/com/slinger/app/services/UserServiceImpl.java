@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(user -> {
                     UserDTO userDTO = userMapper.userToUserDTO(user);
-                    userDTO.setUserUrl(USER_URL);
+                    userDTO.setUserUrl(USER_URL + "/" + user.getId());
                     return userDTO;
                 }).collect(Collectors.toList());
     }
