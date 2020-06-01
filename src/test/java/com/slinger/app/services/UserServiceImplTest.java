@@ -2,15 +2,12 @@ package com.slinger.app.services;
 
 import com.slinger.app.api.v1.mapper.UserMapper;
 import com.slinger.app.api.v1.model.UserDTO;
-import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
 import com.slinger.app.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,6 +15,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static com.slinger.app.controllers.UserController.*;
 
 class UserServiceImplTest {
 
@@ -72,7 +70,7 @@ class UserServiceImplTest {
         assertEquals(NAME, userDTO.getName());
         assertEquals(USERNAME, userDTO.getUsername());
         assertEquals(EMAIL, userDTO.getEmail());
-        assertEquals("/api/v1/users/" + ID, userDTO.getUserUrl()); //todo make this a constant
+        assertEquals(USER_URL + "/" + ID, userDTO.getUserUrl());
         verify(userRepository, times(1)).findById(anyLong());
 
     }

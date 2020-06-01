@@ -6,10 +6,11 @@ import com.slinger.app.domian.User;
 import com.slinger.app.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.slinger.app.controllers.UserController.*;
 
 @Slf4j
 @Service
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(user -> {
                     UserDTO userDTO = userMapper.userToUserDTO(user);
-                    userDTO.setUserUrl("/api/v1/users"); //todo make this a constant
+                    userDTO.setUserUrl(USER_URL);
                     return userDTO;
                 }).collect(Collectors.toList());
     }
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
                 .findById(id)
                 .map(user -> {
                     UserDTO userDTO = userMapper.userToUserDTO(user);
-                    userDTO.setUserUrl("/api/v1/users/" + user.getId()); //todo make this a constant
+                    userDTO.setUserUrl(USER_URL + "/" + user.getId());
                     return userDTO;
                 })
                 .orElseThrow(() ->new RuntimeException("User not found with id " + id)); //todo add better exception handling
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
     private UserDTO saveAndReturn(User user) {
         User savedUser = userRepository.save(user);
         UserDTO returnDTO = userMapper.userToUserDTO(savedUser);
-        returnDTO.setUserUrl("/api/v1/users/" + savedUser.getId()); //todo make this a constant
+        returnDTO.setUserUrl(USER_URL + "/" + savedUser.getId());
         return returnDTO;
     }
 }
