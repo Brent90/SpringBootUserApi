@@ -1,5 +1,6 @@
 package com.slinger.app.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.slinger.app.controllers.UserController.*;
@@ -76,6 +78,30 @@ class UserControllerTest {
 
         verify(userService, times(1)).findUserById(anyLong());
     }
+
+    @Test //todo fix this testing
+    void createUser() throws Exception {
+//        UserDTO userDTO = new UserDTO();
+//        userDTO.setName(NAME);
+//        userDTO.setUsername(USERNAME);
+//        userDTO.setEmail(EMAIL);
+//
+//        UserDTO returnDTO = new UserDTO();
+//        returnDTO.setName(userDTO.getName());
+//        returnDTO.setUsername(userDTO.getUsername());
+//        returnDTO.setEmail(userDTO.getEmail());
+//        returnDTO.setUserUrl(USER_URL + "/1");
+//
+//        when(userService.createNewUser(userDTO)).thenReturn(returnDTO);
+//
+//        mockMvc.perform(post(USER_URL)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .contentType(new ObjectMapper().writeValueAsString(userDTO)))
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.name", equalTo(NAME)));
+    }
+
+
 }
 
 
