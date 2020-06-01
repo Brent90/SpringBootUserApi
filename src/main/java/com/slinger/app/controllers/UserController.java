@@ -40,6 +40,12 @@ public class UserController {
     public UserDTO updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
         return userService.updateUser(Long.valueOf(id), userDTO);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUserById(@PathVariable String id) {
+        userService.deleteUserById(Long.valueOf(id));
+    }
 }
 
 

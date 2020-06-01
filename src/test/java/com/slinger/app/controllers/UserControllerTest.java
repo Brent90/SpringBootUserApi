@@ -17,9 +17,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.slinger.app.controllers.UserController.*;
@@ -129,6 +127,17 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.user_url", equalTo(USER_URL + "/1")));
 
         verify(userService, times(1)).updateUser(anyLong(), any(UserDTO.class));
+
+    }
+
+    @Test
+    void deleteUserById() throws Exception {
+
+        mockMvc.perform(delete(USER_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(userService, times(1)).deleteUserById(anyLong());
 
     }
 }
