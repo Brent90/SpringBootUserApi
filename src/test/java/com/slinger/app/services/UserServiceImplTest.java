@@ -1,8 +1,10 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.mapper.PostMapper;
 import com.slinger.app.api.v1.mapper.UserMapper;
 import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +28,15 @@ class UserServiceImplTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    PostRepository postRepository;
+
     UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-       userService = new UserServiceImpl(userRepository, UserMapper.USER_MAPPER);
+       userService = new UserServiceImpl(userRepository, postRepository, UserMapper.USER_MAPPER, PostMapper.POST_MAPPER);
     }
 
     @Test

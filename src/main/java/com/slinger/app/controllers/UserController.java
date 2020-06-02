@@ -1,10 +1,15 @@
 package com.slinger.app.controllers;
 
+import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.api.v1.model.UserDTOList;
+import com.slinger.app.domian.Post;
 import com.slinger.app.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.Lob;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -46,7 +51,36 @@ public class UserController {
     public void deleteUserById(@PathVariable String id) {
         userService.deleteUserById(Long.valueOf(id));
     }
+
+    @GetMapping("/{id}/posts")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostDTO> listUserPosts(@PathVariable String id) {
+        return userService.listAllUserPosts(Long.valueOf(id));
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

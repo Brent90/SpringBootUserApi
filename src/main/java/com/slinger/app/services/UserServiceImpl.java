@@ -1,8 +1,11 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.mapper.PostMapper;
 import com.slinger.app.api.v1.mapper.UserMapper;
+import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,11 +20,15 @@ import static com.slinger.app.controllers.UserController.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
     private final UserMapper userMapper;
+    private final PostMapper postMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, UserMapper userMapper, PostMapper postMapper) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
         this.userMapper = userMapper;
+        this.postMapper = postMapper;
     }
 
     @Override
@@ -70,6 +77,21 @@ public class UserServiceImpl implements UserService {
         }else {
             userRepository.deleteById(id);
         }
+
+    }
+
+    @Override
+    public List<PostDTO> listAllUserPosts(Long userId) {
+       return postRepository
+               .findAll()
+               .stream()
+               .filter(post -> post.getUser().getId().equals(userId))
+               .map(post -> {
+                   PostDTO postDTO = postMapper.postToPostDTO(post);
+                   postDTO.setPostUrl("/api/v1/posts/" + post.getId()); //todo make this a constant
+                   postDTO.setUserUrl(USER_URL + "/" + post.getUser().getId());
+                   return postDTO;
+               }).collect(Collectors.toList());
 
     }
 
