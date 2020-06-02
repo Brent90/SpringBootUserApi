@@ -6,6 +6,7 @@ import com.slinger.app.domian.Post;
 import com.slinger.app.repositories.PostRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.slinger.app.controllers.UserController.*;
@@ -54,6 +55,18 @@ public class PostServiceImpl implements PostService {
         post.setId(id);
         postRepository.save(post);
         return setPostDTO(post);
+    }
+
+    @Override
+    public void deletePostById(Long id) {
+        Optional<Post> optionalPost = postRepository.findById(id);
+
+        if(!optionalPost.isPresent()) {
+            throw new RuntimeException("No post found with id " + id); //todo add better exception handling
+        }else {
+            postRepository.deleteById(id);
+        }
+
     }
 
     private PostDTO setPostDTO(Post post) {

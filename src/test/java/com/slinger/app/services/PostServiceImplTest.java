@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -92,6 +93,24 @@ class PostServiceImplTest {
         assertEquals(POST_BODY, savedDTO.getBody());
         assertEquals(POST_TITLE, savedDTO.getTitle());
         verify(postRepository, times(1)).save(any(Post.class));
+    }
+
+    @Test
+    void deletePostById() {
+        Post post = new Post();
+        post.setId(ID);
+        post.setTitle(POST_TITLE);
+        post.setBody(POST_BODY);
+
+        postRepository.deleteById(ID);
+
+        Optional<Post> deletedPost = postRepository.findById(ID);
+
+        assertThrows(NoSuchElementException.class, () -> postRepository.findById(ID).get());
+        verify(postRepository, times(1)).deleteById(anyLong());
+
+
+
     }
 }
 
