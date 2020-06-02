@@ -3,6 +3,7 @@ package com.slinger.app.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.services.PostService;
+import com.sun.xml.bind.v2.model.core.ID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -89,6 +90,15 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.body", equalTo(POST_BODY)));
 
         verify(postService, times(1)).createPost(any(PostDTO.class));
+    }
+
+    @Test
+    void deletePostById() throws Exception {
+        mockMvc.perform(delete(POST_URL + "/3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(postService).deletePostById(anyLong());
     }
 }
 
