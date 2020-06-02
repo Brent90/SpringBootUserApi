@@ -1,6 +1,8 @@
 package com.slinger.app.bootstrap;
 
+import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -11,15 +13,18 @@ import org.springframework.stereotype.Component;
 public class Bootstrap implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-    public Bootstrap(UserRepository userRepository) {
+    public Bootstrap(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         loadData();
         log.debug("Load users, size: " + userRepository.count());
+        log.debug("Load posts, size: " + postRepository.count());
     }
 
     private void loadData() {
@@ -46,5 +51,62 @@ public class Bootstrap implements CommandLineRunner {
         userRepository.save(user9);
         userRepository.save(user10);
 
+
+        //load Posts
+        Post post1 = Post.builder().id(1L).title("Title 1").body("Post 1 body").build();
+        post1.setUser(user2);
+
+        Post post2 = Post.builder().id(2L).title("Title 2").body("Post 2 body").build();
+        post2.setUser(user2);
+
+        Post post3 = Post.builder().id(3L).title("Title 3").body("Post 3 body").build();
+        post3.setUser(user1);
+
+        Post post4 = Post.builder().id(4L).title("Title 4").body("Post 4 body").build();
+        post4.setUser(user5);
+
+        Post post5 = Post.builder().id(5L).title("Title 5").body("Post 5 body").build();
+        post5.setUser(user7);
+
+        Post post6 = Post.builder().id(6L).title("Title 6").body("Post 6 body").build();
+        post6.setUser(user9);
+
+        postRepository.save(post1);
+        postRepository.save(post2);
+        postRepository.save(post3);
+        postRepository.save(post4);
+        postRepository.save(post5);
+        postRepository.save(post6);
+
+
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
