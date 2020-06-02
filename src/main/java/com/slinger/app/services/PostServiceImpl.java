@@ -38,6 +38,15 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found with id " + id)); //todo add better exception handling
     }
 
+    @Override
+    public PostDTO createPost(PostDTO postDTO) {
+        Post post = postMapper.postDTOToPost(postDTO);
+        Post savedPost = postRepository.save(post);
+
+        PostDTO returnDTO = setPostDTO(savedPost);
+
+        return returnDTO;
+    }
 
     private PostDTO setPostDTO(Post post) {
         PostDTO postDTO = postMapper.postToPostDTO(post);

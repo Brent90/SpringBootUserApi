@@ -71,6 +71,28 @@ class PostServiceImplTest {
         assertEquals(POST_TITLE, postDTO.getTitle());
         assertEquals(POST_BODY, postDTO.getBody());
     }
+
+    @Test
+    void createPost() {
+        //given
+        PostDTO postDTO = new PostDTO();
+        postDTO.setBody(POST_BODY);
+        postDTO.setTitle(POST_TITLE);
+
+        Post savedPost = PostMapper.POST_MAPPER.postDTOToPost(postDTO);
+        savedPost.setId(ID);
+
+        when(postRepository.save(any(Post.class))).thenReturn(savedPost);
+
+        //when
+        PostDTO savedDTO = postService.createPost(postDTO);
+
+        //then
+        assertNotNull(savedDTO);
+        assertEquals(POST_BODY, savedDTO.getBody());
+        assertEquals(POST_TITLE, savedDTO.getTitle());
+        verify(postRepository, times(1)).save(any(Post.class));
+    }
 }
 
 

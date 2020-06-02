@@ -10,4 +10,6 @@ public interface PostService {
 
     PostDTO findPostById(Long id);
 
+    PostDTO createPost(PostDTO postDTO);
+
 }
