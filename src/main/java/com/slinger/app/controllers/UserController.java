@@ -12,7 +12,7 @@ import javax.persistence.Lob;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping(UserController.USER_URL)
 public class UserController {
 
     private final UserService userService;
