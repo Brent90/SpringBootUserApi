@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,6 +23,8 @@ import static com.slinger.app.controllers.PostController.*;
 
 class PostControllerTest {
 
+    public static final String POST_TITLE = "Post Title";
+    public static final String POST_BODY = "Post Body";
     @Mock
     PostService postService;
 
@@ -48,6 +51,24 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.posts", hasSize(3)));
 
         verify(postService, times(1)).listPosts();
+
+    }
+
+    @Test
+    void findPostById() throws Exception{
+        PostDTO postDTO = new PostDTO();
+        postDTO.setTitle(POST_TITLE);
+        postDTO.setBody(POST_BODY);
+
+        when(postService.findPostById(anyLong())).thenReturn(postDTO);
+
+        mockMvc.perform(get(POST_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", equalTo(POST_TITLE)))
+                .andExpect(jsonPath("$.body", equalTo(POST_BODY)));
+
+        verify(postService, times(1)).findPostById(anyLong());
 
     }
 }
