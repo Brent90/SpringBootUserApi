@@ -48,6 +48,14 @@ public class PostServiceImpl implements PostService {
         return returnDTO;
     }
 
+    @Override
+    public PostDTO updatePost(Long id, PostDTO postDTO) {
+        Post post = postMapper.postDTOToPost(postDTO);
+        post.setId(id);
+        postRepository.save(post);
+        return setPostDTO(post);
+    }
+
     private PostDTO setPostDTO(Post post) {
         PostDTO postDTO = postMapper.postToPostDTO(post);
         postDTO.setPostUrl("/api/v1/posts/" + post.getId()); //todo make this a constant
