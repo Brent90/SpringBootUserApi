@@ -1,5 +1,6 @@
 package com.slinger.app.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.services.PostService;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,6 +71,24 @@ class PostControllerTest {
 
         verify(postService, times(1)).findPostById(anyLong());
 
+    }
+
+    @Test
+    void createPost() throws Exception {
+        PostDTO postDTO = new PostDTO();
+        postDTO.setTitle(POST_TITLE);
+        postDTO.setBody(POST_BODY);
+
+        when(postService.createPost(any(PostDTO.class))).thenReturn(postDTO);
+
+        mockMvc.perform(post(POST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(postDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.title", equalTo(POST_TITLE)))
+                .andExpect(jsonPath("$.body", equalTo(POST_BODY)));
+
+        verify(postService, times(1)).createPost(any(PostDTO.class));
     }
 }
 

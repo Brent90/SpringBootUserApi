@@ -30,4 +30,10 @@ public class PostController {
         return postService.findPostById(Long.valueOf(id));
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostDTO createPost(@RequestBody PostDTO postDTO) {
+        return postService.createPost(postDTO);
+    }
+
 }
