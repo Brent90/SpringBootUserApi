@@ -8,4 +8,6 @@ public interface PostService {
 
     List<PostDTO> listPosts();
 
+    PostDTO findPostById(Long id);
+
 }
