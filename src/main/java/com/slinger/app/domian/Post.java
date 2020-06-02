@@ -1,16 +1,14 @@
 package com.slinger.app.domian;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -38,4 +36,12 @@ public class Post {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }

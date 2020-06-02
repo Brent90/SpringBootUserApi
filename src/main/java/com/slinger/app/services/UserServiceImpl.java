@@ -85,7 +85,12 @@ public class UserServiceImpl implements UserService {
        return postRepository
                .findAll()
                .stream()
-               .filter(post -> post.getUser().getId().equals(userId))
+               .filter(post -> {
+                   if(post.getUser() != null) {
+                      return post.getUser().getId().equals(userId);
+                   }
+                   return false;
+               })
                .map(post -> {
                    PostDTO postDTO = postMapper.postToPostDTO(post);
                    postDTO.setPostUrl("/api/v1/posts/" + post.getId()); //todo make this a constant

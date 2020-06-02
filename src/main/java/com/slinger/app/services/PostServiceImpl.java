@@ -3,14 +3,18 @@ package com.slinger.app.services;
 import com.slinger.app.api.v1.mapper.PostMapper;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.domian.Post;
+import com.slinger.app.domian.User;
 import com.slinger.app.repositories.PostRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.slinger.app.controllers.UserController.*;
+import static com.slinger.app.controllers.PostController.*;
 
+@Slf4j
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -53,8 +57,17 @@ public class PostServiceImpl implements PostService {
     public PostDTO updatePost(Long id, PostDTO postDTO) {
         Post post = postMapper.postDTOToPost(postDTO);
         post.setId(id);
-        postRepository.save(post);
-        return setPostDTO(post);
+
+        Optional<Post> optionalPost = postRepository.findById(id);
+
+        if(optionalPost.isPresent()) {
+            Post foundPost = optionalPost.get();
+            User user = foundPost.getUser();
+            post.setUser(user);
+        }
+
+        Post savedPost = postRepository.save(post);
+        return setPostDTO(savedPost);
     }
 
     @Override
@@ -71,7 +84,7 @@ public class PostServiceImpl implements PostService {
 
     private PostDTO setPostDTO(Post post) {
         PostDTO postDTO = postMapper.postToPostDTO(post);
-        postDTO.setPostUrl("/api/v1/posts/" + post.getId()); //todo make this a constant
+        postDTO.setPostUrl(POST_URL + "/" + post.getId());
 
         if(post.getUser() == null) {
             postDTO.setUserUrl(null);

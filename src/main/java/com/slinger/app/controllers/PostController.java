@@ -2,6 +2,7 @@ package com.slinger.app.controllers;
 
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.PostDTOList;
+import com.slinger.app.domian.Post;
 import com.slinger.app.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,12 @@ public class PostController {
     @ResponseStatus(HttpStatus.CREATED)
     public PostDTO createPost(@RequestBody PostDTO postDTO) {
         return postService.createPost(postDTO);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PostDTO updatePost(@PathVariable String id, @RequestBody PostDTO postDTO) {
+        return postService.updatePost(Long.valueOf(id), postDTO);
     }
 
 }
