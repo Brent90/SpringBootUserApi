@@ -58,6 +58,12 @@ public class UserController {
         return userService.listAllUserPosts(Long.valueOf(id));
     }
 
+    @PostMapping("/{id}/posts")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PostDTO createPostWithUserId(@PathVariable String id, @RequestBody PostDTO postDTO) {
+        return userService.createPostWithUserId(Long.valueOf(id), postDTO);
+    }
+
 
 }
 

@@ -19,4 +19,6 @@ public interface UserService {
 
     List<PostDTO> listAllUserPosts(Long userId);
 
+    PostDTO createPostWithUserId(Long userId, PostDTO postDTO);
+
 }
