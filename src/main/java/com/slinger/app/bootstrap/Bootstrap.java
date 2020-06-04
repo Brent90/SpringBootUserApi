@@ -84,25 +84,39 @@ public class Bootstrap implements CommandLineRunner {
 
         //load comments
         Comment comment1 = Comment.builder().id(1L).body("Great Post").build();
+        comment1.setPost(post2);
         post2.addComment(comment1);
+        comment1.setUser(user2);
         user2.addComment(comment1);
 
         Comment comment2 = Comment.builder().id(2L).body("Bad Post").build();
+        comment2.setPost(post1);
         post1.addComment(comment2);
+        comment2.setUser(user2);
         user2.addComment(comment2);
 
         Comment comment3 = Comment.builder().id(3L).body("Okay Post").build();
+        comment3.setPost(post5);
         post5.addComment(comment3);
+        comment3.setUser(user7);
         user7.addComment(comment3);
 
         Comment comment4 = Comment.builder().id(4L).body("Delete this Post").build();
+        comment4.setPost(post3);
         post3.addComment(comment4);
+        comment4.setUser(user2);
         user2.addComment(comment4);
+
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
         commentRepository.save(comment3);
         commentRepository.save(comment4);
+
+        System.out.println(comment1.getPost().getId());
+        System.out.println(comment2.getPost().getId());
+        System.out.println(comment3.getPost().getId());
+        System.out.println(comment4.getPost().getId());
 
 
     }
