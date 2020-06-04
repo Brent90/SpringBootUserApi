@@ -10,4 +10,6 @@ public interface CommentService {
     List<CommentDTO> listAllComments();
 
     CommentDTO findCommentById(Long id);
+
+    void deleteCommentById(Long id);
 }

@@ -14,10 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -100,6 +97,19 @@ class CommentServiceImplTest {
         //then
         assertNotNull(commentDTO);
         assertEquals("Comment Body", commentDTO.getBody());
+    }
+
+    @Test
+    void deleteCommentById() {
+        Comment comment = new Comment();
+        comment.setId(1L);
+
+        commentRepository.deleteById(1L);
+
+        Optional<Comment> commentOptional = commentRepository.findById(1L);
+
+        assertThrows(NoSuchElementException.class, () -> commentRepository.findById(1L).get());
+        verify(commentRepository, times(1)).deleteById(anyLong());
     }
 }
 
