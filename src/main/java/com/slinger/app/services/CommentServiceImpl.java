@@ -27,9 +27,9 @@ public class CommentServiceImpl implements CommentService {
                 .stream()
                 .map(comment -> {
                     CommentDTO commentDTO = commentMapper.commentToCommentDTO(comment);
-                    commentDTO.setCommentUrl("/api/v1/comments/" + comment.getId());
-                    commentDTO.setPostUrl("/api/v1/posts/" + comment.getPost().getId());
-                    commentDTO.setUserUrl("/api/v1/users/" + comment.getUser().getId());
+                    commentDTO.setCommentUrl("/api/v1/comments/" + comment.getId());  //todo make this a constant
+                    commentDTO.setPostUrl("/api/v1/posts/" + comment.getPost().getId()); //todo make this a constant
+                    commentDTO.setUserUrl("/api/v1/users/" + comment.getUser().getId()); //todo make this a constant
                     return commentDTO;
                 }).collect(Collectors.toList());
     }
