@@ -29,4 +29,10 @@ public class CommentController {
         return commentService.findCommentById(Long.valueOf(id));
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCommentById(@PathVariable String id) {
+        commentService.deleteCommentById(Long.valueOf(id));
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.slinger.app.controllers;
 
 import com.slinger.app.api.v1.model.CommentDTO;
+import com.slinger.app.domian.Comment;
 import com.slinger.app.services.CommentService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,4 +72,37 @@ class CommentControllerTest {
         verify(commentService, times(1)).findCommentById(anyLong());
 
     }
+
+    @Test
+    void deleteCommentById() throws Exception{
+        mockMvc.perform(delete(COMMENT_URL + "/" + 1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(commentService, times(1)).deleteCommentById(anyLong());
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
