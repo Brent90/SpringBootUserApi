@@ -1,12 +1,10 @@
 package com.slinger.app.controllers;
 
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.CommentDTOList;
 import com.slinger.app.services.CommentService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(CommentController.COMMENT_URL)
@@ -23,6 +21,12 @@ public class CommentController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDTOList getComments() {
          return new CommentDTOList(commentService.listAllComments());
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDTO getCommentById(@PathVariable String id) {
+        return commentService.findCommentById(Long.valueOf(id));
     }
 
 }

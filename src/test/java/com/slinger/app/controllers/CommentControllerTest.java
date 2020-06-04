@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -52,6 +53,22 @@ class CommentControllerTest {
 
         verify(commentService, times(1)).listAllComments();
 
+
+    }
+
+    @Test
+    void getCommentById() throws Exception {
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setBody("Comment Body");
+
+        when(commentService.findCommentById(anyLong())).thenReturn(commentDTO);
+
+        mockMvc.perform(get(COMMENT_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.body", equalTo(commentDTO.getBody())));
+
+        verify(commentService, times(1)).findCommentById(anyLong());
 
     }
 }
