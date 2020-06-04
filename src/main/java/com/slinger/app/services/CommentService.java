@@ -8,4 +8,6 @@ import java.util.List;
 public interface CommentService {
 
     List<CommentDTO> listAllComments();
+
+    CommentDTO findCommentById(Long id);
 }

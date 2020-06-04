@@ -17,11 +17,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CommentServiceImplTest {
+
+
 
     @Mock
     CommentRepository commentRepository;
@@ -72,4 +75,47 @@ class CommentServiceImplTest {
         verify(commentRepository, times(1)).findAll();
 
     }
+
+    @Test
+    void findCommentById() {
+        //given
+        Comment comment = new Comment();
+        comment.setBody("Comment Body");
+
+        User user1 = new User();
+        user1.setId(3L);
+
+        Post post1 = new Post();
+        post1.setId(1L);
+
+        comment.setUser(user1);
+        comment.setPost(post1);
+
+
+        when(commentRepository.findById(anyLong())).thenReturn(Optional.of(comment));
+
+        //when
+        CommentDTO commentDTO = commentService.findCommentById(anyLong());
+
+        //then
+        assertNotNull(commentDTO);
+        assertEquals("Comment Body", commentDTO.getBody());
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
