@@ -1,7 +1,9 @@
 package com.slinger.app.bootstrap;
 
+import com.slinger.app.domian.Comment;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +16,12 @@ public class Bootstrap implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
-    public Bootstrap(UserRepository userRepository, PostRepository postRepository) {
+    public Bootstrap(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -78,6 +82,27 @@ public class Bootstrap implements CommandLineRunner {
         postRepository.save(post5);
         postRepository.save(post6);
 
+        //load comments
+        Comment comment1 = Comment.builder().id(1L).body("Great Post").build();
+        post2.addComment(comment1);
+        user2.addComment(comment1);
+
+        Comment comment2 = Comment.builder().id(2L).body("Bad Post").build();
+        post1.addComment(comment2);
+        user2.addComment(comment2);
+
+        Comment comment3 = Comment.builder().id(3L).body("Okay Post").build();
+        post5.addComment(comment3);
+        user7.addComment(comment3);
+
+        Comment comment4 = Comment.builder().id(4L).body("Delete this Post").build();
+        post3.addComment(comment4);
+        user2.addComment(comment4);
+
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
+        commentRepository.save(comment3);
+        commentRepository.save(comment4);
 
 
     }

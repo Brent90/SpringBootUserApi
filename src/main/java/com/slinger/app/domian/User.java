@@ -37,5 +37,14 @@ public class User {
         return this;
     }
 
+    public void addComment(Comment comment) {
+        if(comments == null) {
+            comments = new ArrayList<>();
+        }
+
+        comment.setUser(this);
+        comments.add(comment);
+    }
+
 
 }
