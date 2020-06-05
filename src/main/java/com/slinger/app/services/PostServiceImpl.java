@@ -6,6 +6,7 @@ import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.exceptions.NotFoundException;
 import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class PostServiceImpl implements PostService {
         return postRepository
                 .findById(id)
                 .map(post -> setPostDTO(post))
-                .orElseThrow(() -> new RuntimeException("Post not found with id " + id)); //todo add better exception handling
+                .orElseThrow(() -> new NotFoundException("Post not found with id " + id));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class PostServiceImpl implements PostService {
         Optional<Post> optionalPost = postRepository.findById(id);
 
         if(!optionalPost.isPresent()) {
-            throw new RuntimeException("No post found with id " + id); //todo add better exception handling
+            throw new NotFoundException("No post found with id " + id);
         }else {
             postRepository.deleteById(id);
         }
@@ -92,7 +93,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<CommentDTO> listPostComments(Long postId) {
-        Post post = postRepository.findById(postId).get();
+        Optional<Post> optionalPost = postRepository.findById(postId);
+
+        if(!optionalPost.isPresent()) {
+            throw new NotFoundException("No post found with id " + postId);
+        }
+
+        Post post = optionalPost.get();
 
        return post.getComments().stream()
                 .map(comment -> {

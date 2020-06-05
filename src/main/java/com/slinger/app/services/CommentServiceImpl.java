@@ -3,6 +3,7 @@ package com.slinger.app.services;
 import com.slinger.app.api.v1.mapper.CommentMapper;
 import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.domian.Comment;
+import com.slinger.app.exceptions.NotFoundException;
 import com.slinger.app.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -48,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
                   commentDTO.setPostUrl(POST_URL + "/" + comment.getPost().getId());
                   commentDTO.setUserUrl(USER_URL + "/" + comment.getUser().getId());
                   return commentDTO;
-                }).orElseThrow(() -> new RuntimeException("No comment found with id " + id)); //todo add better exception handling
+                }).orElseThrow(() -> new NotFoundException("No comment found with id " + id));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<Comment> commentOptional = commentRepository.findById(id);
 
         if(!commentOptional.isPresent()) {
-            throw new RuntimeException("No comment found with id " + id); // todo add better exception handling
+            throw new NotFoundException("No comment found with id " + id);
         }
 
         Comment deleteComment = commentOptional.get();

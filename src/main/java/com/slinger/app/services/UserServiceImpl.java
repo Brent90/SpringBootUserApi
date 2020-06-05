@@ -9,6 +9,7 @@ import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.domian.Comment;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.exceptions.NotFoundException;
 import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
@@ -33,7 +34,13 @@ public class UserServiceImpl implements UserService {
     private final PostMapper postMapper;
     private final CommentMapper commentMapper;
 
-    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, UserMapper userMapper, PostMapper postMapper, CommentMapper commentMapper) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PostRepository postRepository,
+                           CommentRepository commentRepository,
+                           UserMapper userMapper,
+                           PostMapper postMapper,
+                           CommentMapper commentMapper) {
+
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
@@ -63,7 +70,7 @@ public class UserServiceImpl implements UserService {
                     userDTO.setUserUrl(USER_URL + "/" + user.getId());
                     return userDTO;
                 })
-                .orElseThrow(() ->new RuntimeException("User not found with id " + id)); //todo add better exception handling
+                .orElseThrow(() ->new NotFoundException("User not found with id " + id));
     }
 
     @Override
@@ -84,7 +91,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if(!optionalUser.isPresent()) {
-            throw new RuntimeException("No user found with id " + id + " cannot delete"); //todo add better exception handling
+            throw new NotFoundException("No user found with id " + id + " cannot delete");
         }else {
             userRepository.deleteById(id);
         }
@@ -113,7 +120,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PostDTO createPostWithUserId(Long userId, PostDTO postDTO) {
-        User user = userRepository.findById(userId).get(); //todo add error handling
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if(!optionalUser.isPresent()) {
+            throw new NotFoundException("No user found with id " + userId);
+        }
+
+        User user = optionalUser.get();
+
         Post post = postMapper.postDTOToPost(postDTO);
         user.addPost(post);
         userRepository.save(user);
