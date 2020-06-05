@@ -1,5 +1,6 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.UserDTO;
 
@@ -20,5 +21,8 @@ public interface UserService {
     List<PostDTO> listAllUserPosts(Long userId);
 
     PostDTO createPostWithUserId(Long userId, PostDTO postDTO);
+
+    List<CommentDTO> listAllUserComments(Long userId);
+
 
 }

@@ -1,9 +1,13 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.mapper.CommentMapper;
 import com.slinger.app.api.v1.mapper.PostMapper;
 import com.slinger.app.api.v1.mapper.UserMapper;
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.UserDTO;
+import com.slinger.app.domian.Comment;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,12 +35,20 @@ class UserServiceImplTest {
     @Mock
     PostRepository postRepository;
 
+    @Mock
+    CommentRepository commentRepository;
+
     UserService userService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-       userService = new UserServiceImpl(userRepository, postRepository, UserMapper.USER_MAPPER, PostMapper.POST_MAPPER);
+       userService = new UserServiceImpl(userRepository,
+               postRepository,
+               commentRepository,
+               UserMapper.USER_MAPPER,
+               PostMapper.POST_MAPPER,
+               CommentMapper.COMMENT_MAPPER);
     }
 
     @Test
@@ -116,4 +128,5 @@ class UserServiceImplTest {
         assertThrows(NoSuchElementException.class, () -> optionalUser.get());
         verify(userRepository, times(1)).deleteById(anyLong());
     }
+
 }

@@ -1,11 +1,14 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.mapper.CommentMapper;
 import com.slinger.app.api.v1.mapper.PostMapper;
 import com.slinger.app.api.v1.mapper.UserMapper;
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.slinger.app.controllers.UserController.*;
+import static com.slinger.app.controllers.PostController.*;
+import static com.slinger.app.controllers.CommentController.*;
 
 @Slf4j
 @Service
@@ -22,14 +27,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final UserMapper userMapper;
     private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
 
-    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, UserMapper userMapper, PostMapper postMapper) {
+    public UserServiceImpl(UserRepository userRepository, PostRepository postRepository, CommentRepository commentRepository, UserMapper userMapper, PostMapper postMapper, CommentMapper commentMapper) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
         this.userMapper = userMapper;
         this.postMapper = postMapper;
+        this.commentMapper = commentMapper;
     }
 
     @Override
@@ -94,7 +103,7 @@ public class UserServiceImpl implements UserService {
                })
                .map(post -> {
                    PostDTO postDTO = postMapper.postToPostDTO(post);
-                   postDTO.setPostUrl("/api/v1/posts/" + post.getId()); //todo make this a constant
+                   postDTO.setPostUrl(POST_URL + "/" + post.getId());
                    postDTO.setUserUrl(USER_URL + "/" + post.getUser().getId());
                    return postDTO;
                }).collect(Collectors.toList());
@@ -110,6 +119,21 @@ public class UserServiceImpl implements UserService {
 
         return postMapper.postToPostDTO(post);
 
+    }
+
+    @Override
+    public List<CommentDTO> listAllUserComments(Long userId) {
+        return commentRepository
+                .findAll()
+                .stream()
+                .filter(comment -> comment.getUser().getId().equals(userId)
+                ).map(comment -> {
+                    CommentDTO commentDTO = commentMapper.commentToCommentDTO(comment);
+                    commentDTO.setCommentUrl(COMMENT_URL + "/" + comment.getId());
+                    commentDTO.setPostUrl(POST_URL + "/" + comment.getPost().getId());
+                    commentDTO.setUserUrl(USER_URL + "/" + comment.getUser().getId());
+                    return commentDTO;
+                }).collect(Collectors.toList());
     }
 
     //helper method for saving and updating user

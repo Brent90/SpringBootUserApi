@@ -1,5 +1,6 @@
 package com.slinger.app.controllers;
 
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.UserDTO;
 import com.slinger.app.api.v1.model.UserDTOList;
@@ -62,6 +63,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public PostDTO createPostWithUserId(@PathVariable String id, @RequestBody PostDTO postDTO) {
         return userService.createPostWithUserId(Long.valueOf(id), postDTO);
+    }
+
+    @GetMapping("/{id}/comments")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDTO> listUserComments(@PathVariable String id) {
+        return userService.listAllUserComments(Long.valueOf(id));
     }
 
 
