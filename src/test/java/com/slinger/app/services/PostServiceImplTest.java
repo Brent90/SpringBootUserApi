@@ -1,11 +1,12 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.mapper.CommentMapper;
 import com.slinger.app.api.v1.mapper.PostMapper;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
-import com.slinger.app.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -29,12 +30,15 @@ class PostServiceImplTest {
     @Mock
     PostRepository postRepository;
 
+    @Mock
+    CommentRepository commentRepository;
+
     PostService postService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        postService = new PostServiceImpl(postRepository, PostMapper.POST_MAPPER);
+        postService = new PostServiceImpl(postRepository, commentRepository, PostMapper.POST_MAPPER, CommentMapper.COMMENT_MAPPER);
     }
 
     @Test

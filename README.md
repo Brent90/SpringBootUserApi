@@ -3,9 +3,10 @@
 An API created with SpringBoot to expose users, posts and comments and allow for CRUD operations.
 
 Endpoints: <br/>
+
 User: <br/>
-/api/v1/users  <br/>
-/api/v1/users/{id} <br/>
+/api/v1/users 
+/api/v1/users/{id}   
 /api/v1/users/{id}/posts <br/>
 /api/v1/users/{id}/comments <br/>
 

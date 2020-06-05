@@ -1,9 +1,12 @@
 package com.slinger.app.services;
 
+import com.slinger.app.api.v1.mapper.CommentMapper;
 import com.slinger.app.api.v1.mapper.PostMapper;
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
+import com.slinger.app.repositories.CommentRepository;
 import com.slinger.app.repositories.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,17 +16,22 @@ import java.util.stream.Collectors;
 
 import static com.slinger.app.controllers.UserController.*;
 import static com.slinger.app.controllers.PostController.*;
+import static com.slinger.app.controllers.CommentController.*;
 
 @Slf4j
 @Service
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final PostMapper postMapper;
+    private final CommentMapper commentMapper;
 
-    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper) {
+    public PostServiceImpl(PostRepository postRepository, CommentRepository commentRepository, PostMapper postMapper, CommentMapper commentMapper) {
         this.postRepository = postRepository;
+        this.commentRepository = commentRepository;
         this.postMapper = postMapper;
+        this.commentMapper = commentMapper;
     }
 
     @Override
@@ -80,6 +88,20 @@ public class PostServiceImpl implements PostService {
             postRepository.deleteById(id);
         }
 
+    }
+
+    @Override
+    public List<CommentDTO> listPostComments(Long postId) {
+        Post post = postRepository.findById(postId).get();
+
+       return post.getComments().stream()
+                .map(comment -> {
+                    CommentDTO commentDTO = commentMapper.commentToCommentDTO(comment);
+                    commentDTO.setCommentUrl(COMMENT_URL + "/" + comment.getId());
+                    commentDTO.setPostUrl(POST_URL + "/" + postId);
+                    commentDTO.setUserUrl(USER_URL + "/" + post.getUser().getId());
+                    return commentDTO;
+                }).collect(Collectors.toList());
     }
 
     private PostDTO setPostDTO(Post post) {

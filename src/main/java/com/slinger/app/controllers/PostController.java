@@ -1,11 +1,14 @@
 package com.slinger.app.controllers;
 
+import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.PostDTOList;
 import com.slinger.app.domian.Post;
 import com.slinger.app.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(PostController.POST_URL)
@@ -47,6 +50,11 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public void deletePostById(@PathVariable String id) {
         postService.deletePostById(Long.valueOf(id));
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<CommentDTO> listPostComments(@PathVariable String id) {
+        return postService.listPostComments(Long.valueOf(id));
     }
 
 

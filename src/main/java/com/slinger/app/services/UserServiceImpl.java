@@ -6,6 +6,7 @@ import com.slinger.app.api.v1.mapper.UserMapper;
 import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.api.v1.model.PostDTO;
 import com.slinger.app.api.v1.model.UserDTO;
+import com.slinger.app.domian.Comment;
 import com.slinger.app.domian.Post;
 import com.slinger.app.domian.User;
 import com.slinger.app.repositories.CommentRepository;
@@ -135,6 +136,7 @@ public class UserServiceImpl implements UserService {
                     return commentDTO;
                 }).collect(Collectors.toList());
     }
+
 
     //helper method for saving and updating user
     private UserDTO saveAndReturn(User user) {
