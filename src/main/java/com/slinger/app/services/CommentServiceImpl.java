@@ -5,6 +5,7 @@ import com.slinger.app.api.v1.model.CommentDTO;
 import com.slinger.app.domian.Comment;
 import com.slinger.app.exceptions.NotFoundException;
 import com.slinger.app.repositories.CommentRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;

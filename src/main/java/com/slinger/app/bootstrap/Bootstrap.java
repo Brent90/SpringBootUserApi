@@ -8,9 +8,11 @@ import com.slinger.app.repositories.PostRepository;
 import com.slinger.app.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j
+@Profile("default")
 @Component
 public class Bootstrap implements CommandLineRunner {
 
